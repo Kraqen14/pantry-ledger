@@ -158,7 +158,7 @@ function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, 
           {r.servings != null && (<span className="flex items-center gap-1"><Users2 size={13} /> {r.servings} {t.servings}</span>)}
         </div>
         {r.macros && (
-          <div className="grid grid-cols-4 gap-1.5 mb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mb-3">
             {[
               { key: "calories", label: t.kcal, value: r.macros.calories, bg: "#FFF1E8", fg: "#FF6B4A" },
               { key: "protein_g", label: t.protein, value: r.macros.protein_g, bg: "#FFF6DC", fg: "#D9A441" },
@@ -299,7 +299,7 @@ export default function PantryDashboard() {
   const activeCategory = CATEGORIES.find((c) => c.key === quickCategory);
 
   return (
-    <div className="min-h-screen w-full" style={{ background: "#FFF8EC", fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "#FFF8EC", fontFamily: "'Inter', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
         .display { font-family: 'Fredoka', sans-serif; }
@@ -309,7 +309,7 @@ export default function PantryDashboard() {
       `}</style>
 
       <div style={{ background: "linear-gradient(90deg, #FF6B4A 0%, #FF7F6B 45%, #FFA84A 100%)" }}>
-        <div className="max-w-6xl mx-auto px-5 py-2.5 flex items-center justify-between flex-wrap gap-2">
+        <div className="max-w-6xl mx-auto px-4 sm:px-5 py-2.5 flex items-center justify-between flex-wrap gap-2">
           <span className="flex items-center gap-1.5 mono text-[11px] font-bold uppercase tracking-wide" style={{ color: "#FFF3EA" }}>
             <Globe size={13} /> {t.chooseLanguage}
           </span>
@@ -326,14 +326,14 @@ export default function PantryDashboard() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-5 py-10 md:py-14">
+      <div className="max-w-6xl mx-auto px-4 sm:px-5 py-8 sm:py-10 md:py-14">
         <header className="mb-10 md:mb-14 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-2 mb-2" style={{ color: "#FF6B4A" }}>
               <ChefHat size={22} strokeWidth={2} />
               <span className="mono text-xs font-bold tracking-[0.2em] uppercase">{t.brand}</span>
             </div>
-            <h1 className="display text-4xl md:text-5xl font-semibold leading-tight" style={{ color: "#241C15" }}>{t.heroLine1}<br /><span style={{ color: "#FF6B4A" }}>{t.heroLine2}</span></h1>
+            <h1 className="display text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight" style={{ color: "#241C15" }}>{t.heroLine1}<br /><span style={{ color: "#FF6B4A" }}>{t.heroLine2}</span></h1>
             <p className="mt-3 max-w-xl" style={{ color: "#9A8A76" }}>{t.subtitle}</p>
           </div>
           <button onClick={() => setShowFavorites((v) => !v)} className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold mt-1 transition-all active:scale-95" style={{ background: showFavorites ? "#FFC93C" : "#FFFFFF", color: "#241C15", boxShadow: "0 6px 16px -6px rgba(255,201,60,0.6)" }}>
@@ -344,7 +344,7 @@ export default function PantryDashboard() {
 
         <div className="grid md:grid-cols-[380px_1fr] gap-6 md:gap-8">
           <div>
-            <div className="rounded-3xl p-5 md:p-6 sticky top-6" style={{ background: "#FFFFFF", boxShadow: "0 16px 34px -14px rgba(36,28,21,0.18)" }}>
+            <div className="rounded-3xl p-5 md:p-6 md:sticky md:top-6" style={{ background: "#FFFFFF", boxShadow: "0 16px 34px -14px rgba(36,28,21,0.18)" }}>
               <h2 className="display text-lg font-semibold mb-4" style={{ color: "#241C15" }}>{t.yourPantry}</h2>
 
               <ul className="mb-4 flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
@@ -353,9 +353,9 @@ export default function PantryDashboard() {
                   <li key={idx} className="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-2xl" style={{ background: "#FFF8EC" }}>
                     <span className="text-sm truncate font-medium" style={{ color: "#241C15" }}>{translateItem(item.name, lang)}</span>
                     <div className="flex items-center gap-1 shrink-0">
-                      <button onClick={() => updateQty(idx, -1)} aria-label={`Decrease ${item.name} quantity`} className="w-5 h-5 rounded-full flex items-center justify-center text-xs mono font-bold" style={{ background: "#FFE4D6", color: "#FF6B4A" }}>−</button>
+                      <button onClick={() => updateQty(idx, -1)} aria-label={`Decrease ${item.name} quantity`} className="w-6 h-6 rounded-full flex items-center justify-center text-xs mono font-bold shrink-0" style={{ background: "#FFE4D6", color: "#FF6B4A" }}>−</button>
                       <input value={item.qty} onChange={(e) => setQtyValue(idx, e.target.value)} className="w-10 text-center text-xs mono rounded-lg py-0.5 outline-none" style={{ background: "#FFFFFF", border: "1px solid #EDE2D3", color: "#241C15" }} />
-                      <button onClick={() => updateQty(idx, 1)} aria-label={`Increase ${item.name} quantity`} className="w-5 h-5 rounded-full flex items-center justify-center text-xs mono font-bold" style={{ background: "#FFE4D6", color: "#FF6B4A" }}>+</button>
+                      <button onClick={() => updateQty(idx, 1)} aria-label={`Increase ${item.name} quantity`} className="w-6 h-6 rounded-full flex items-center justify-center text-xs mono font-bold shrink-0" style={{ background: "#FFE4D6", color: "#FF6B4A" }}>+</button>
                       <select value={item.unit} onChange={(e) => setUnitValue(idx, e.target.value)} className="text-xs mono rounded-lg py-0.5 outline-none" style={{ background: "#FFFFFF", border: "1px solid #EDE2D3", color: "#241C15" }}>
                         {UNITS.map((u) => (<option key={u} value={u}>{UNIT_LABELS[u][lang]}</option>))}
                       </select>
