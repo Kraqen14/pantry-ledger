@@ -1,5 +1,5 @@
-const CACHE_NAME = "pantry-ledger-v1";
-const APP_SHELL = ["/", "/index.html", "/icon-192.png", "/icon-512.png"];
+const CACHE_NAME = "pantry-ledger-v2";
+const APP_SHELL = ["/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -17,10 +17,23 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Network-first for API calls, cache-first for the app shell.
+// Never cache API calls.
+// Navigation requests (the page itself) always go to the network first, so a
+// new deploy is picked up immediately — falling back to a cached copy only if
+// the network is unreachable (offline). Static assets (JS/CSS/icons) are
+// cache-first since Vite gives them content-hashed filenames that are safe
+// to cache indefinitely.
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-  if (url.pathname.startsWith("/api/")) return; // never cache API responses
+  if (url.pathname.startsWith("/api/")) return;
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
