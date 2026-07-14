@@ -1,0 +1,9 @@
+{
+  "appId": "com.yourname.pantryledger",
+  "appName": "Pantry Ledger",
+  "webDir": "dist",
+  "backgroundColor": "#1F2E22",
+  "server": {
+    "androidScheme": "https"
+  }
+}
