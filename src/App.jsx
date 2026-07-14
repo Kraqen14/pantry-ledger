@@ -12,9 +12,9 @@ const LANGUAGES = [
 const LANGUAGE_NAMES = { en: "English", pt: "Portuguese", es: "Spanish", fr: "French", it: "Italian" };
 
 const DIETS = [
-  { key: "carnivorous", icon: Beef, color: "#B5482A" },
-  { key: "vegetarian", icon: Leaf, color: "#B98418" },
-  { key: "vegan", icon: Sprout, color: "#5B7A4A" },
+  { key: "carnivorous", icon: Beef, color: "#FF5A4E" },
+  { key: "vegetarian", icon: Leaf, color: "#FFB238" },
+  { key: "vegan", icon: Sprout, color: "#3FA34D" },
 ];
 
 const UNITS = ["g", "kg", "ml", "l", "tsp", "tbsp", "cup", "piece", "pinch"];
@@ -32,12 +32,12 @@ const UNIT_LABELS = {
 };
 
 const CATEGORIES = [
-  { key: "vegetables", icon: Carrot, defaultUnit: "g", items: ["Tomato", "Onion", "Garlic", "Carrot", "Potato", "Spinach", "Broccoli", "Bell pepper", "Zucchini", "Mushroom", "Cucumber", "Lettuce"] },
-  { key: "fruits", icon: Apple, defaultUnit: "piece", items: ["Apple", "Banana", "Lemon", "Lime", "Orange", "Avocado", "Berries", "Mango", "Grapes", "Pineapple"] },
-  { key: "proteins", icon: Drumstick, defaultUnit: "g", items: ["Chicken breast", "Beef", "Pork", "Salmon", "Shrimp", "Tofu", "Eggs", "Chickpeas", "Lentils", "Black beans"] },
-  { key: "dairy", icon: Milk, defaultUnit: "ml", items: ["Milk", "Butter", "Cheese", "Yogurt", "Cream", "Eggs"] },
-  { key: "grains", icon: Wheat, defaultUnit: "g", items: ["Rice", "Pasta", "Bread", "Flour", "Oats", "Quinoa"] },
-  { key: "spices", icon: Flame, defaultUnit: "tsp", items: ["Salt", "Black pepper", "Paprika", "Cumin", "Cinnamon", "Oregano", "Basil", "Chili powder", "Turmeric", "Ginger", "Nutmeg", "Bay leaf"] },
+  { key: "vegetables", icon: Carrot, defaultUnit: "g", color: "#3FA34D", items: ["Tomato", "Onion", "Garlic", "Carrot", "Potato", "Spinach", "Broccoli", "Bell pepper", "Zucchini", "Mushroom", "Cucumber", "Lettuce"] },
+  { key: "fruits", icon: Apple, defaultUnit: "piece", color: "#FF6F91", items: ["Apple", "Banana", "Lemon", "Lime", "Orange", "Avocado", "Berries", "Mango", "Grapes", "Pineapple"] },
+  { key: "proteins", icon: Drumstick, defaultUnit: "g", color: "#E8483A", items: ["Chicken breast", "Beef", "Pork", "Salmon", "Shrimp", "Tofu", "Eggs", "Chickpeas", "Lentils", "Black beans"] },
+  { key: "dairy", icon: Milk, defaultUnit: "ml", color: "#4FB8E8", items: ["Milk", "Butter", "Cheese", "Yogurt", "Cream", "Eggs"] },
+  { key: "grains", icon: Wheat, defaultUnit: "g", color: "#D9A441", items: ["Rice", "Pasta", "Bread", "Flour", "Oats", "Quinoa"] },
+  { key: "spices", icon: Flame, defaultUnit: "tsp", color: "#FF8C42", items: ["Salt", "Black pepper", "Paprika", "Cumin", "Cinnamon", "Oregano", "Basil", "Chili powder", "Turmeric", "Ginger", "Nutmeg", "Bay leaf"] },
 ];
 
 const ITEM_TRANSLATIONS = {
@@ -111,15 +111,12 @@ function translateItem(name, lang) {
 }
 
 function parseRecipesSafely(text) {
-  // Try a clean parse first.
   try {
     const parsed = JSON.parse(text);
     if (Array.isArray(parsed)) return parsed;
   } catch (e) {
     // fall through to recovery below
   }
-  // Response was likely cut off mid-object. Recover whichever top-level
-  // {...} objects in the array are complete and valid, and drop the rest.
   const recovered = [];
   let depth = 0;
   let start = -1;
@@ -144,69 +141,59 @@ function parseRecipesSafely(text) {
   return recovered;
 }
 
-function Punch() {
-  return (
-    <div className="flex gap-2 justify-center -mt-1 mb-3">
-      <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#1F2E22", opacity: 0.15 }} />
-      <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#1F2E22", opacity: 0.15 }} />
-    </div>
-  );
-}
-
 function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, t }) {
   return (
-    <div className="card-in rounded-sm p-5" style={{ background: "#F6EFE3", boxShadow: "0 10px 24px -10px rgba(0,0,0,0.45)", animationDelay: `${delay}ms` }}>
-      <Punch />
-      <div className="flex items-start justify-between gap-2 mb-1.5">
-        <h3 className="fraunces text-lg font-semibold leading-snug" style={{ color: "#2B2118" }}>{r.title}</h3>
-        <div className="flex items-center gap-2 shrink-0 mt-0.5">
-          <span className="w-2.5 h-2.5 rounded-full" style={{ background: dietColor }} />
-          <button onClick={() => onToggleFavorite(r)} aria-label={favorited ? `Remove ${r.title} from favorites` : `Save ${r.title} to favorites`} className="transition-transform active:scale-90" style={{ color: favorited ? "#C1543C" : "#B8AC98" }}>
-            <Heart size={16} fill={favorited ? "#C1543C" : "none"} strokeWidth={1.75} />
+    <div className="card-in rounded-3xl overflow-hidden" style={{ background: "#FFFFFF", boxShadow: "0 14px 30px -12px rgba(255,107,74,0.28)", animationDelay: `${delay}ms` }}>
+      <div style={{ height: 6, background: dietColor }} />
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-2 mb-1.5">
+          <h3 className="display text-lg font-semibold leading-snug" style={{ color: "#241C15" }}>{r.title}</h3>
+          <button onClick={() => onToggleFavorite(r)} aria-label={favorited ? `Remove ${r.title} from favorites` : `Save ${r.title} to favorites`} className="transition-transform active:scale-90 shrink-0 mt-0.5" style={{ color: favorited ? "#FF6B4A" : "#D8CFC2" }}>
+            <Heart size={18} fill={favorited ? "#FF6B4A" : "none"} strokeWidth={1.75} />
           </button>
         </div>
-      </div>
-      <p className="text-sm mb-3" style={{ color: "#5A5044" }}>{r.description}</p>
-      <div className="flex items-center gap-4 mb-3 mono text-xs" style={{ color: "#8A7F6E" }}>
-        {r.time_minutes != null && (<span className="flex items-center gap-1"><Clock size={13} /> {r.time_minutes} {t.min}</span>)}
-        {r.servings != null && (<span className="flex items-center gap-1"><Users2 size={13} /> {r.servings} {t.servings}</span>)}
-      </div>
-      {r.macros && (
-        <div className="grid grid-cols-4 gap-1.5 mb-3">
-          {[
-            { key: "calories", label: t.kcal, value: r.macros.calories },
-            { key: "protein_g", label: t.protein, value: r.macros.protein_g },
-            { key: "carbs_g", label: t.carbs, value: r.macros.carbs_g },
-            { key: "fat_g", label: t.fat, value: r.macros.fat_g },
-          ].map((m) =>
-            m.value != null ? (
-              <div key={m.key} className="rounded-sm py-1.5 text-center" style={{ background: "rgba(31,46,34,0.05)" }}>
-                <div className="mono text-sm font-medium" style={{ color: "#2B2118" }}>
-                  {m.value}{m.key !== "calories" ? "g" : ""}
+        <p className="text-sm mb-3" style={{ color: "#8B7E6E" }}>{r.description}</p>
+        <div className="flex items-center gap-4 mb-3 mono text-xs font-medium" style={{ color: "#B8846B" }}>
+          {r.time_minutes != null && (<span className="flex items-center gap-1"><Clock size={13} /> {r.time_minutes} {t.min}</span>)}
+          {r.servings != null && (<span className="flex items-center gap-1"><Users2 size={13} /> {r.servings} {t.servings}</span>)}
+        </div>
+        {r.macros && (
+          <div className="grid grid-cols-4 gap-1.5 mb-3">
+            {[
+              { key: "calories", label: t.kcal, value: r.macros.calories, bg: "#FFF1E8", fg: "#FF6B4A" },
+              { key: "protein_g", label: t.protein, value: r.macros.protein_g, bg: "#FFF6DC", fg: "#D9A441" },
+              { key: "carbs_g", label: t.carbs, value: r.macros.carbs_g, bg: "#EAF7EC", fg: "#3FA34D" },
+              { key: "fat_g", label: t.fat, value: r.macros.fat_g, bg: "#EAF6FC", fg: "#4FB8E8" },
+            ].map((m) =>
+              m.value != null ? (
+                <div key={m.key} className="rounded-xl py-1.5 text-center" style={{ background: m.bg }}>
+                  <div className="mono text-sm font-bold" style={{ color: m.fg }}>
+                    {m.value}{m.key !== "calories" ? "g" : ""}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide font-medium" style={{ color: "#A8927D" }}>{m.label}</div>
                 </div>
-                <div className="text-[10px] uppercase tracking-wide" style={{ color: "#8A7F6E" }}>{m.label}</div>
-              </div>
-            ) : null
-          )}
-        </div>
-      )}
-      {r.used_ingredients?.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-1.5">
-          {r.used_ingredients.map((u, ui) => (
-            <span key={ui} className="mono text-[11px] px-2 py-0.5 rounded-sm" style={{ background: "rgba(138,155,110,0.18)", color: "#4E5E3E" }}>{u}</span>
-          ))}
-        </div>
-      )}
-      {r.extra_ingredients?.length > 0 && (
-        <p className="text-xs mb-3" style={{ color: "#8A7F6E" }}><span className="font-medium">{t.alsoNeeds}</span> {r.extra_ingredients.join(", ")}</p>
-      )}
-      {r.steps?.length > 0 && (
-        <ol className="text-sm flex flex-col gap-1.5 mt-2 pt-3" style={{ borderTop: "1px solid rgba(43,33,24,0.1)", color: "#2B2118" }}>
-          {r.steps.map((s, si) => (
-            <li key={si} className="flex gap-2"><span className="mono shrink-0" style={{ color: "#C1543C" }}>{si + 1}.</span><span>{s}</span></li>
-          ))}
-        </ol>
-      )}
+              ) : null
+            )}
+          </div>
+        )}
+        {r.used_ingredients?.length > 0 && (
+          <div className="mb-3 flex flex-wrap gap-1.5">
+            {r.used_ingredients.map((u, ui) => (
+              <span key={ui} className="mono text-[11px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EAF7EC", color: "#2E7D3E" }}>{u}</span>
+            ))}
+          </div>
+        )}
+        {r.extra_ingredients?.length > 0 && (
+          <p className="text-xs mb-3" style={{ color: "#A8927D" }}><span className="font-semibold">{t.alsoNeeds}</span> {r.extra_ingredients.join(", ")}</p>
+        )}
+        {r.steps?.length > 0 && (
+          <ol className="text-sm flex flex-col gap-1.5 mt-2 pt-3" style={{ borderTop: "1px dashed #EDE2D3", color: "#241C15" }}>
+            {r.steps.map((s, si) => (
+              <li key={si} className="flex gap-2"><span className="mono shrink-0 font-bold" style={{ color: "#FF6B4A" }}>{si + 1}.</span><span>{s}</span></li>
+            ))}
+          </ol>
+        )}
+      </div>
     </div>
   );
 }
@@ -309,27 +296,28 @@ export default function PantryDashboard() {
   };
 
   const activeDiet = DIETS.find((d) => d.key === diet);
+  const activeCategory = CATEGORIES.find((c) => c.key === quickCategory);
 
   return (
-    <div className="min-h-screen w-full" style={{ background: "#1F2E22", fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen w-full" style={{ background: "#FFF8EC", fontFamily: "'Inter', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
-        .fraunces { font-family: 'Fraunces', serif; }
-        .mono { font-family: 'IBM Plex Mono', monospace; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .card-in { animation: fadeUp 0.4s ease both; }
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+        .display { font-family: 'Fredoka', sans-serif; }
+        .mono { font-family: 'Space Mono', monospace; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .card-in { animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
       `}</style>
 
-      <div style={{ background: "#182219", borderBottom: "1px solid rgba(246,239,227,0.1)" }}>
+      <div style={{ background: "linear-gradient(90deg, #FF6B4A 0%, #FF7F6B 45%, #FFA84A 100%)" }}>
         <div className="max-w-6xl mx-auto px-5 py-2.5 flex items-center justify-between flex-wrap gap-2">
-          <span className="flex items-center gap-1.5 mono text-[11px] uppercase tracking-wide" style={{ color: "#8A9B6E" }}>
+          <span className="flex items-center gap-1.5 mono text-[11px] font-bold uppercase tracking-wide" style={{ color: "#FFF3EA" }}>
             <Globe size={13} /> {t.chooseLanguage}
           </span>
           <div className="flex gap-1.5 flex-wrap">
             {LANGUAGES.map((l) => {
               const active = lang === l.code;
               return (
-                <button key={l.code} onClick={() => setLang(l.code)} className="px-2.5 py-1 rounded-full text-xs transition-colors" style={{ background: active ? "#D4A017" : "transparent", color: active ? "#1F2E22" : "#A9B6A1", border: active ? "1px solid #D4A017" : "1px solid rgba(169,182,161,0.3)" }}>
+                <button key={l.code} onClick={() => setLang(l.code)} className="px-3 py-1 rounded-full text-xs font-semibold transition-all" style={{ background: active ? "#FFFFFF" : "rgba(255,255,255,0.16)", color: active ? "#FF6B4A" : "#FFF3EA" }}>
                   {l.label}
                 </button>
               );
@@ -341,61 +329,66 @@ export default function PantryDashboard() {
       <div className="max-w-6xl mx-auto px-5 py-10 md:py-14">
         <header className="mb-10 md:mb-14 flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <div className="flex items-center gap-2 mb-2" style={{ color: "#D4A017" }}>
-              <ChefHat size={20} strokeWidth={1.75} />
-              <span className="mono text-xs tracking-[0.2em] uppercase">{t.brand}</span>
+            <div className="flex items-center gap-2 mb-2" style={{ color: "#FF6B4A" }}>
+              <ChefHat size={22} strokeWidth={2} />
+              <span className="mono text-xs font-bold tracking-[0.2em] uppercase">{t.brand}</span>
             </div>
-            <h1 className="fraunces text-4xl md:text-5xl font-semibold leading-tight" style={{ color: "#F6EFE3" }}>{t.heroLine1}<br />{t.heroLine2}</h1>
-            <p className="mt-3 max-w-xl" style={{ color: "#A9B6A1" }}>{t.subtitle}</p>
+            <h1 className="display text-4xl md:text-5xl font-semibold leading-tight" style={{ color: "#241C15" }}>{t.heroLine1}<br /><span style={{ color: "#FF6B4A" }}>{t.heroLine2}</span></h1>
+            <p className="mt-3 max-w-xl" style={{ color: "#9A8A76" }}>{t.subtitle}</p>
           </div>
-          <button onClick={() => setShowFavorites((v) => !v)} className="flex items-center gap-2 px-3.5 py-2 rounded-sm text-sm mt-1 transition-colors" style={{ background: showFavorites ? "#D4A017" : "rgba(246,239,227,0.08)", color: showFavorites ? "#1F2E22" : "#F6EFE3", border: "1px solid rgba(246,239,227,0.2)" }}>
-            <Star size={15} fill={showFavorites ? "#1F2E22" : "none"} />
+          <button onClick={() => setShowFavorites((v) => !v)} className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold mt-1 transition-all active:scale-95" style={{ background: showFavorites ? "#FFC93C" : "#FFFFFF", color: "#241C15", boxShadow: "0 6px 16px -6px rgba(255,201,60,0.6)" }}>
+            <Star size={16} fill={showFavorites ? "#241C15" : "none"} />
             {t.favorites} {favorites.length > 0 && `(${favorites.length})`}
           </button>
         </header>
 
         <div className="grid md:grid-cols-[380px_1fr] gap-6 md:gap-8">
           <div>
-            <div className="rounded-sm p-5 md:p-6 sticky top-6" style={{ background: "#F6EFE3", boxShadow: "0 12px 30px -12px rgba(0,0,0,0.5)" }}>
-              <h2 className="fraunces text-lg font-semibold mb-4" style={{ color: "#2B2118" }}>{t.yourPantry}</h2>
+            <div className="rounded-3xl p-5 md:p-6 sticky top-6" style={{ background: "#FFFFFF", boxShadow: "0 16px 34px -14px rgba(36,28,21,0.18)" }}>
+              <h2 className="display text-lg font-semibold mb-4" style={{ color: "#241C15" }}>{t.yourPantry}</h2>
 
               <ul className="mb-4 flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
-                {pantry.length === 0 && (<li className="text-sm italic" style={{ color: "#8A7F6E" }}>{t.emptyPantry}</li>)}
+                {pantry.length === 0 && (<li className="text-sm italic" style={{ color: "#B0A28D" }}>{t.emptyPantry}</li>)}
                 {pantry.map((item, idx) => (
-                  <li key={idx} className="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-sm" style={{ background: "rgba(31,46,34,0.05)" }}>
-                    <span className="text-sm truncate" style={{ color: "#2B2118" }}>{translateItem(item.name, lang)}</span>
+                  <li key={idx} className="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-2xl" style={{ background: "#FFF8EC" }}>
+                    <span className="text-sm truncate font-medium" style={{ color: "#241C15" }}>{translateItem(item.name, lang)}</span>
                     <div className="flex items-center gap-1 shrink-0">
-                      <button onClick={() => updateQty(idx, -1)} aria-label={`Decrease ${item.name} quantity`} className="w-5 h-5 rounded-sm flex items-center justify-center text-xs mono" style={{ background: "rgba(43,33,24,0.1)", color: "#2B2118" }}>−</button>
-                      <input value={item.qty} onChange={(e) => setQtyValue(idx, e.target.value)} className="w-10 text-center text-xs mono rounded-sm py-0.5 outline-none" style={{ background: "#FFFFFF", border: "1px solid rgba(43,33,24,0.15)", color: "#2B2118" }} />
-                      <button onClick={() => updateQty(idx, 1)} aria-label={`Increase ${item.name} quantity`} className="w-5 h-5 rounded-sm flex items-center justify-center text-xs mono" style={{ background: "rgba(43,33,24,0.1)", color: "#2B2118" }}>+</button>
-                      <select value={item.unit} onChange={(e) => setUnitValue(idx, e.target.value)} className="text-xs mono rounded-sm py-0.5 outline-none" style={{ background: "#FFFFFF", border: "1px solid rgba(43,33,24,0.15)", color: "#2B2118" }}>
+                      <button onClick={() => updateQty(idx, -1)} aria-label={`Decrease ${item.name} quantity`} className="w-5 h-5 rounded-full flex items-center justify-center text-xs mono font-bold" style={{ background: "#FFE4D6", color: "#FF6B4A" }}>−</button>
+                      <input value={item.qty} onChange={(e) => setQtyValue(idx, e.target.value)} className="w-10 text-center text-xs mono rounded-lg py-0.5 outline-none" style={{ background: "#FFFFFF", border: "1px solid #EDE2D3", color: "#241C15" }} />
+                      <button onClick={() => updateQty(idx, 1)} aria-label={`Increase ${item.name} quantity`} className="w-5 h-5 rounded-full flex items-center justify-center text-xs mono font-bold" style={{ background: "#FFE4D6", color: "#FF6B4A" }}>+</button>
+                      <select value={item.unit} onChange={(e) => setUnitValue(idx, e.target.value)} className="text-xs mono rounded-lg py-0.5 outline-none" style={{ background: "#FFFFFF", border: "1px solid #EDE2D3", color: "#241C15" }}>
                         {UNITS.map((u) => (<option key={u} value={u}>{UNIT_LABELS[u][lang]}</option>))}
                       </select>
-                      <button onClick={() => removeIngredient(idx)} aria-label={`Remove ${item.name}`} className="opacity-50 hover:opacity-100 transition-opacity ml-0.5" style={{ color: "#B5482A" }}><X size={15} /></button>
+                      <button onClick={() => removeIngredient(idx)} aria-label={`Remove ${item.name}`} className="opacity-50 hover:opacity-100 transition-opacity ml-0.5" style={{ color: "#E8483A" }}><X size={15} /></button>
                     </div>
                   </li>
                 ))}
               </ul>
 
-              <div className="mb-4 pt-4" style={{ borderTop: "1px solid rgba(43,33,24,0.12)" }}>
-                <div className="text-xs mono uppercase tracking-wide mb-2" style={{ color: "#8A7F6E" }}>{t.quickAdd}</div>
+              <div className="mb-4 pt-4" style={{ borderTop: "1px dashed #EDE2D3" }}>
+                <div className="text-xs mono font-bold uppercase tracking-wide mb-2" style={{ color: "#B0A28D" }}>{t.quickAdd}</div>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {CATEGORIES.map((cat) => {
                     const Icon = cat.icon;
                     const active = quickCategory === cat.key;
                     return (
-                      <button key={cat.key} onClick={() => setQuickCategory(cat.key)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm text-xs transition-colors" style={{ background: active ? "#1F2E22" : "rgba(31,46,34,0.06)", color: active ? "#F6EFE3" : "#5A5044" }}>
-                        <Icon size={13} strokeWidth={1.75} />
+                      <button key={cat.key} onClick={() => setQuickCategory(cat.key)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all" style={{ background: active ? cat.color : `${cat.color}1A`, color: active ? "#FFFFFF" : cat.color }}>
+                        <Icon size={13} strokeWidth={2} />
                         {t.categoryLabels[cat.key]}
                       </button>
                     );
                   })}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {CATEGORIES.find((c) => c.key === quickCategory)?.items.map((item) => {
+                  {activeCategory?.items.map((item) => {
                     const added = isInPantry(item);
                     return (
-                      <button key={item} onClick={() => quickAdd(item, CATEGORIES.find((c) => c.key === quickCategory).defaultUnit)} disabled={added} className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs transition-all disabled:cursor-default" style={{ background: added ? "rgba(138,155,110,0.25)" : "#FFFFFF", border: added ? "1px solid rgba(138,155,110,0.5)" : "1px solid rgba(43,33,24,0.15)", color: added ? "#4E5E3E" : "#2B2118", transform: justAdded === item ? "scale(1.05)" : "scale(1)" }}>
+                      <button key={item} onClick={() => quickAdd(item, activeCategory.defaultUnit)} disabled={added} className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-all disabled:cursor-default" style={{
+                        background: added ? "#EAF7EC" : `${activeCategory.color}14`,
+                        border: added ? "1px solid #BFE3C6" : `1px solid ${activeCategory.color}33`,
+                        color: added ? "#2E7D3E" : "#241C15",
+                        transform: justAdded === item ? "scale(1.08)" : "scale(1)",
+                      }}>
                         {added ? "✓" : "+"} {translateItem(item, lang)}
                       </button>
                     );
@@ -403,27 +396,27 @@ export default function PantryDashboard() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 mb-5 pt-4" style={{ borderTop: "1px solid rgba(43,33,24,0.12)" }}>
-                <div className="text-xs mono uppercase tracking-wide mb-0.5" style={{ color: "#8A7F6E" }}>{t.orAddOwn}</div>
-                <input ref={nameInputRef} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} placeholder={t.ingredientPlaceholder} className="w-full px-3 py-2 rounded-sm text-sm outline-none" style={{ background: "#FFFFFF", border: "1px solid rgba(43,33,24,0.15)", color: "#2B2118" }} />
+              <div className="flex flex-col gap-2 mb-5 pt-4" style={{ borderTop: "1px dashed #EDE2D3" }}>
+                <div className="text-xs mono font-bold uppercase tracking-wide mb-0.5" style={{ color: "#B0A28D" }}>{t.orAddOwn}</div>
+                <input ref={nameInputRef} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} placeholder={t.ingredientPlaceholder} className="w-full px-3.5 py-2.5 rounded-2xl text-sm outline-none" style={{ background: "#FFF8EC", border: "1px solid #EDE2D3", color: "#241C15" }} />
                 <div className="flex gap-2">
-                  <input value={qty} onChange={(e) => setQty(e.target.value)} onKeyDown={handleKeyDown} placeholder={t.qtyPlaceholder} className="w-20 px-3 py-2 rounded-sm text-sm outline-none mono" style={{ background: "#FFFFFF", border: "1px solid rgba(43,33,24,0.15)", color: "#2B2118" }} />
-                  <select value={unit} onChange={(e) => setUnit(e.target.value)} className="flex-1 px-2 py-2 rounded-sm text-sm outline-none mono" style={{ background: "#FFFFFF", border: "1px solid rgba(43,33,24,0.15)", color: "#2B2118" }}>
+                  <input value={qty} onChange={(e) => setQty(e.target.value)} onKeyDown={handleKeyDown} placeholder={t.qtyPlaceholder} className="w-20 px-3 py-2.5 rounded-2xl text-sm outline-none mono" style={{ background: "#FFF8EC", border: "1px solid #EDE2D3", color: "#241C15" }} />
+                  <select value={unit} onChange={(e) => setUnit(e.target.value)} className="flex-1 px-2 py-2.5 rounded-2xl text-sm outline-none mono" style={{ background: "#FFF8EC", border: "1px solid #EDE2D3", color: "#241C15" }}>
                     {UNITS.map((u) => (<option key={u} value={u}>{UNIT_LABELS[u][lang]}</option>))}
                   </select>
-                  <button onClick={addIngredient} aria-label="Add ingredient" className="px-3 rounded-sm flex items-center justify-center transition-transform active:scale-95" style={{ background: "#1F2E22", color: "#F6EFE3" }}><Plus size={16} /></button>
+                  <button onClick={addIngredient} aria-label="Add ingredient" className="px-3.5 rounded-2xl flex items-center justify-center transition-transform active:scale-90" style={{ background: "#FF6B4A", color: "#FFFFFF" }}><Plus size={16} /></button>
                 </div>
               </div>
 
               <div className="mb-5">
-                <div className="text-xs mono uppercase tracking-wide mb-2" style={{ color: "#8A7F6E" }}>{t.howYouEat}</div>
-                <div className="flex rounded-sm overflow-hidden" style={{ border: "1px solid rgba(43,33,24,0.15)" }} role="radiogroup" aria-label="Dietary preference">
+                <div className="text-xs mono font-bold uppercase tracking-wide mb-2" style={{ color: "#B0A28D" }}>{t.howYouEat}</div>
+                <div className="flex rounded-2xl overflow-hidden gap-1.5" role="radiogroup" aria-label="Dietary preference">
                   {DIETS.map((d) => {
                     const Icon = d.icon;
                     const active = diet === d.key;
                     return (
-                      <button key={d.key} role="radio" aria-checked={active} onClick={() => setDiet(d.key)} className="flex-1 flex flex-col items-center gap-1 py-2.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2" style={{ background: active ? d.color : "transparent", color: active ? "#F6EFE3" : "#5A5044" }}>
-                        <Icon size={16} strokeWidth={1.75} />
+                      <button key={d.key} role="radio" aria-checked={active} onClick={() => setDiet(d.key)} className="flex-1 flex flex-col items-center gap-1 py-2.5 rounded-2xl text-xs font-semibold transition-all focus-visible:outline focus-visible:outline-2" style={{ background: active ? d.color : "#FFF8EC", color: active ? "#FFFFFF" : "#9A8A76" }}>
+                        <Icon size={16} strokeWidth={2} />
                         {t.dietLabels[d.key]}
                       </button>
                     );
@@ -431,28 +424,28 @@ export default function PantryDashboard() {
                 </div>
               </div>
 
-              <button onClick={() => generateRecipes(false)} disabled={loading} className="w-full py-2.5 rounded-sm text-sm font-medium flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-70" style={{ background: "#C1543C", color: "#F6EFE3" }}>
+              <button onClick={() => generateRecipes(false)} disabled={loading} className="w-full py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-transform active:scale-[0.97] disabled:opacity-70" style={{ background: "linear-gradient(90deg, #FF6B4A, #FFA84A)", color: "#FFFFFF", boxShadow: "0 10px 22px -8px rgba(255,107,74,0.55)" }}>
                 {loading ? (<><Loader2 size={16} className="animate-spin" /> {t.workingItOut}</>) : t.findRecipes}
               </button>
             </div>
 
             {favorites.length > 0 && (
-              <div className="rounded-sm p-5 mt-6" style={{ background: "#F6EFE3", boxShadow: "0 12px 30px -12px rgba(0,0,0,0.5)" }}>
+              <div className="rounded-3xl p-5 mt-6" style={{ background: "#FFFFFF", boxShadow: "0 16px 34px -14px rgba(36,28,21,0.18)" }}>
                 <div className="flex items-center gap-1.5 mb-3">
-                  <Star size={15} fill="#D4A017" color="#D4A017" />
-                  <h2 className="fraunces text-base font-semibold" style={{ color: "#2B2118" }}>{t.favorites}</h2>
+                  <Star size={16} fill="#FFC93C" color="#FFC93C" />
+                  <h2 className="display text-base font-semibold" style={{ color: "#241C15" }}>{t.favorites}</h2>
                 </div>
                 <ul className="flex flex-col gap-1.5">
                   {favorites.map((r, i) => (
-                    <li key={r.title + i} className="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-sm" style={{ background: "rgba(31,46,34,0.05)" }}>
-                      <span className="text-sm truncate" style={{ color: "#2B2118" }}>{r.title}</span>
+                    <li key={r.title + i} className="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-2xl" style={{ background: "#FFF8EC" }}>
+                      <span className="text-sm truncate font-medium" style={{ color: "#241C15" }}>{r.title}</span>
                       <button
                         onClick={() => toggleFavorite(r)}
                         aria-label={`Remove ${r.title} from favorites`}
                         className="opacity-60 hover:opacity-100 transition-opacity shrink-0"
-                        style={{ color: "#C1543C" }}
+                        style={{ color: "#FF6B4A" }}
                       >
-                        <Heart size={14} fill="#C1543C" strokeWidth={1.75} />
+                        <Heart size={14} fill="#FF6B4A" strokeWidth={1.75} />
                       </button>
                     </li>
                   ))}
@@ -468,23 +461,23 @@ export default function PantryDashboard() {
                   {favorites.map((r, i) => (<RecipeCard key={r.title + i} recipe={r} dietColor={activeDiet?.color} delay={i * 80} favorited={true} onToggleFavorite={toggleFavorite} t={t} />))}
                 </div>
               ) : (
-                <div className="rounded-sm p-10 text-center" style={{ background: "rgba(246,239,227,0.06)", border: "1px dashed rgba(246,239,227,0.2)" }}>
-                  <p className="fraunces text-xl mb-1" style={{ color: "#F6EFE3" }}>{t.noFavoritesTitle}</p>
-                  <p className="text-sm" style={{ color: "#A9B6A1" }}>{t.noFavoritesSubtitle}</p>
+                <div className="rounded-3xl p-10 text-center" style={{ background: "rgba(255,255,255,0.5)", border: "2px dashed #F3C9B5" }}>
+                  <p className="display text-xl mb-1" style={{ color: "#241C15" }}>{t.noFavoritesTitle}</p>
+                  <p className="text-sm" style={{ color: "#9A8A76" }}>{t.noFavoritesSubtitle}</p>
                 </div>
               )
             ) : (
               <>
-                {error && (<div className="mb-5 px-4 py-3 rounded-sm text-sm flex items-center gap-2" style={{ background: "rgba(193,84,60,0.15)", color: "#E8B8AC" }}><AlertCircle size={16} /> {error}</div>)}
+                {error && (<div className="mb-5 px-4 py-3 rounded-2xl text-sm flex items-center gap-2 font-medium" style={{ background: "#FFE9E5", color: "#D8402F" }}><AlertCircle size={16} /> {error}</div>)}
                 {!hasSearched && !loading && (
-                  <div className="rounded-sm p-10 text-center" style={{ background: "rgba(246,239,227,0.06)", border: "1px dashed rgba(246,239,227,0.2)" }}>
-                    <p className="fraunces text-xl mb-1" style={{ color: "#F6EFE3" }}>{t.ledgerWaitingTitle}</p>
-                    <p className="text-sm" style={{ color: "#A9B6A1" }}>{t.ledgerWaitingSubtitle}</p>
+                  <div className="rounded-3xl p-10 text-center" style={{ background: "rgba(255,255,255,0.5)", border: "2px dashed #F3C9B5" }}>
+                    <p className="display text-xl mb-1" style={{ color: "#241C15" }}>{t.ledgerWaitingTitle}</p>
+                    <p className="text-sm" style={{ color: "#9A8A76" }}>{t.ledgerWaitingSubtitle}</p>
                   </div>
                 )}
                 {loading && (
                   <div className="grid sm:grid-cols-2 gap-5">
-                    {[0, 1, 2, 3].map((i) => (<div key={i} className="rounded-sm h-64 animate-pulse" style={{ background: "rgba(246,239,227,0.08)" }} />))}
+                    {[0, 1, 2, 3].map((i) => (<div key={i} className="rounded-3xl h-64 animate-pulse" style={{ background: "rgba(255,255,255,0.6)" }} />))}
                   </div>
                 )}
                 {!loading && recipes.length > 0 && (
@@ -496,8 +489,8 @@ export default function PantryDashboard() {
                       <button
                         onClick={() => generateRecipes(true)}
                         disabled={loadingMore}
-                        className="px-4 py-2 rounded-sm text-sm font-medium flex items-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-70"
-                        style={{ background: "rgba(246,239,227,0.1)", color: "#F6EFE3", border: "1px solid rgba(246,239,227,0.25)" }}
+                        className="px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2 transition-transform active:scale-95 disabled:opacity-70"
+                        style={{ background: "#FFFFFF", color: "#FF6B4A", boxShadow: "0 10px 22px -10px rgba(36,28,21,0.25)" }}
                       >
                         {loadingMore ? (<><Loader2 size={15} className="animate-spin" /> {t.workingItOut}</>) : t.loadMore}
                       </button>
@@ -505,8 +498,8 @@ export default function PantryDashboard() {
                   </>
                 )}
                 {!loading && hasSearched && !error && recipes.length === 0 && (
-                  <div className="rounded-sm p-10 text-center" style={{ background: "rgba(246,239,227,0.06)", border: "1px dashed rgba(246,239,227,0.2)" }}>
-                    <p style={{ color: "#A9B6A1" }}>{t.noRecipesBack}</p>
+                  <div className="rounded-3xl p-10 text-center" style={{ background: "rgba(255,255,255,0.5)", border: "2px dashed #F3C9B5" }}>
+                    <p style={{ color: "#9A8A76" }}>{t.noRecipesBack}</p>
                   </div>
                 )}
               </>
