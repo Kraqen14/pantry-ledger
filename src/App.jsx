@@ -285,7 +285,12 @@ export default function PantryDashboard() {
       const languageName = LANGUAGE_NAMES[lang];
       const avoidTitles = append ? recipes.map((r) => r.title) : [];
 
-      const response = await fetch("/api/recipes", {
+      // On the website, a relative path works. Inside the native (Capacitor)
+      // app there is no server behind the page, so requests must go to the
+      // deployed backend's absolute URL.
+      const isNativeApp = window.Capacitor?.isNativePlatform?.() === true;
+      const API_BASE = isNativeApp ? "https://pantry-ledger-ochre.vercel.app" : "";
+      const response = await fetch(`${API_BASE}/api/recipes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ingredientList, dietLabelEn, languageName, avoidTitles }),
