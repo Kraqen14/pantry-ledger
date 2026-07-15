@@ -155,7 +155,7 @@ function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, 
     <div className="card-in rounded-sm p-5" style={{ background: "#F6EFE3", boxShadow: "0 10px 24px -10px rgba(0,0,0,0.45)", animationDelay: `${delay}ms` }}>
       <Punch />
       <div className="flex items-start justify-between gap-2 mb-1.5">
-        <h3 className="fraunces text-lg font-semibold leading-snug" style={{ color: "#2B2118" }}>{r.title}</h3>
+        <h3 className="fraunces text-2xl font-bold leading-snug" style={{ color: "#2B2118" }}>{r.title}</h3>
         <div className="flex items-center gap-2 shrink-0 mt-0.5">
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: dietColor }} />
           <button onClick={() => onToggleFavorite(r)} aria-label={favorited ? `Remove ${r.title} from favorites` : `Save ${r.title} to favorites`} className="transition-transform active:scale-90" style={{ color: favorited ? "#C1543C" : "#B8AC98" }}>
@@ -310,8 +310,8 @@ export default function PantryDashboard() {
   return (
     <div className="min-h-screen w-full overflow-x-hidden" style={{ background: "#1F2E22", fontFamily: "'Inter', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
-        .fraunces { font-family: 'Fraunces', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+        .fraunces { font-family: 'Caveat', cursive; }
         .mono { font-family: 'IBM Plex Mono', monospace; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .card-in { animation: fadeUp 0.4s ease both; }
@@ -336,16 +336,16 @@ export default function PantryDashboard() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-5 py-8 sm:py-10 md:py-14">
-        <header className="mb-10 md:mb-14 flex items-start justify-between gap-4 flex-wrap">
-          <div>
+        <header className="mb-10 md:mb-14 flex flex-col items-center text-center gap-4">
+          <div className="flex flex-col items-center">
             <div className="flex items-center gap-2 mb-2" style={{ color: "#D4A017" }}>
               <ChefHat size={20} strokeWidth={1.75} />
               <span className="mono text-xs tracking-[0.2em] uppercase">{t.brand}</span>
             </div>
-            <h1 className="fraunces text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight" style={{ color: "#F6EFE3" }}>{t.heroLine1}<br />{t.heroLine2}</h1>
+            <h1 className="fraunces text-5xl sm:text-6xl md:text-7xl font-bold leading-tight" style={{ color: "#F6EFE3" }}>{t.heroLine1}<br />{t.heroLine2}</h1>
             <p className="mt-3 max-w-xl" style={{ color: "#A9B6A1" }}>{t.subtitle}</p>
           </div>
-          <button onClick={() => setShowFavorites((v) => !v)} className="flex items-center gap-2 px-3.5 py-2 rounded-sm text-sm mt-1 transition-colors" style={{ background: showFavorites ? "#D4A017" : "rgba(246,239,227,0.08)", color: showFavorites ? "#1F2E22" : "#F6EFE3", border: "1px solid rgba(246,239,227,0.2)" }}>
+          <button onClick={() => setShowFavorites((v) => !v)} className="flex items-center gap-2 px-3.5 py-2 rounded-sm text-sm transition-colors" style={{ background: showFavorites ? "#D4A017" : "rgba(246,239,227,0.08)", color: showFavorites ? "#1F2E22" : "#F6EFE3", border: "1px solid rgba(246,239,227,0.2)" }}>
             <Star size={15} fill={showFavorites ? "#1F2E22" : "none"} />
             {t.favorites} {favorites.length > 0 && `(${favorites.length})`}
           </button>
@@ -354,7 +354,7 @@ export default function PantryDashboard() {
         <div className="grid md:grid-cols-[380px_1fr] gap-6 md:gap-8">
           <div>
             <div className="rounded-sm p-5 md:p-6 md:sticky md:top-6" style={{ background: "#F6EFE3", boxShadow: "0 12px 30px -12px rgba(0,0,0,0.5)" }}>
-              <h2 className="fraunces text-lg font-semibold mb-4" style={{ color: "#2B2118" }}>{t.yourPantry}</h2>
+              <h2 className="fraunces text-2xl font-bold mb-4" style={{ color: "#2B2118" }}>{t.yourPantry}</h2>
 
               <ul className="mb-4 flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
                 {pantry.length === 0 && (<li className="text-sm italic" style={{ color: "#8A7F6E" }}>{t.emptyPantry}</li>)}
@@ -442,7 +442,7 @@ export default function PantryDashboard() {
               <div className="rounded-sm p-5 mt-6" style={{ background: "#F6EFE3", boxShadow: "0 12px 30px -12px rgba(0,0,0,0.5)" }}>
                 <div className="flex items-center gap-1.5 mb-3">
                   <Star size={15} fill="#D4A017" color="#D4A017" />
-                  <h2 className="fraunces text-base font-semibold" style={{ color: "#2B2118" }}>{t.favorites}</h2>
+                  <h2 className="fraunces text-xl font-bold" style={{ color: "#2B2118" }}>{t.favorites}</h2>
                 </div>
                 <ul className="flex flex-col gap-1.5">
                   {favorites.map((r, i) => (
@@ -471,7 +471,7 @@ export default function PantryDashboard() {
                 </div>
               ) : (
                 <div className="rounded-sm p-10 text-center" style={{ background: "rgba(246,239,227,0.06)", border: "1px dashed rgba(246,239,227,0.2)" }}>
-                  <p className="fraunces text-xl mb-1" style={{ color: "#F6EFE3" }}>{t.noFavoritesTitle}</p>
+                  <p className="fraunces text-3xl mb-1" style={{ color: "#F6EFE3" }}>{t.noFavoritesTitle}</p>
                   <p className="text-sm" style={{ color: "#A9B6A1" }}>{t.noFavoritesSubtitle}</p>
                 </div>
               )
@@ -480,7 +480,7 @@ export default function PantryDashboard() {
                 {error && (<div className="mb-5 px-4 py-3 rounded-sm text-sm flex items-center gap-2" style={{ background: "rgba(193,84,60,0.15)", color: "#E8B8AC" }}><AlertCircle size={16} /> {error}</div>)}
                 {!hasSearched && !loading && (
                   <div className="rounded-sm p-10 text-center" style={{ background: "rgba(246,239,227,0.06)", border: "1px dashed rgba(246,239,227,0.2)" }}>
-                    <p className="fraunces text-xl mb-1" style={{ color: "#F6EFE3" }}>{t.ledgerWaitingTitle}</p>
+                    <p className="fraunces text-3xl mb-1" style={{ color: "#F6EFE3" }}>{t.ledgerWaitingTitle}</p>
                     <p className="text-sm" style={{ color: "#A9B6A1" }}>{t.ledgerWaitingSubtitle}</p>
                   </div>
                 )}
