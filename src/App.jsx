@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Plus, X, ChefHat, Loader2, Beef, Leaf, Sprout, AlertCircle, Clock, Users2, Carrot, Apple, Drumstick, Milk, Wheat, Heart, Star, Globe, Flame } from "lucide-react";
+import { Analytics } from '@vercel/analytics/react';
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -521,6 +522,7 @@ export default function PantryDashboard() {
           </div>
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
