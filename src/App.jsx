@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { Plus, X, ChefHat, Loader2, Beef, Leaf, Sprout, AlertCircle, Clock, Users2, Carrot, Apple, Drumstick, Milk, Wheat, Heart, Star, Flame, Home, ShoppingBasket, UtensilsCrossed, Settings, ArrowRight } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Plus, X, ChefHat, Loader2, Beef, Leaf, Sprout, AlertCircle, Clock, Users2, Carrot, Apple, Drumstick, Milk, Wheat, Heart, Star, Flame, Home, ShoppingBasket, UtensilsCrossed, Settings, ArrowRight, CheckCircle2 } from "lucide-react";
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -99,12 +99,65 @@ const ITEM_TRANSLATIONS = {
 };
 
 const TRANSLATIONS = {
-  en: { brand: "Pantry Ledger", navHome: "Home", navPantry: "Pantry", navRecipes: "Recipes", navFavorites: "Favorites", navSettings: "Settings", homeGreeting: "What's cooking today?", homeTagline: "Your kitchen companion — tell it what you have, it tells you what's for dinner.", statIngredients: "ingredients in your pantry", statFavorites: "saved favorites", homeGoPantry: "Stock the pantry", homeGoRecipes: "Find something to cook", favorites: "Favorites", yourPantry: "Your pantry", emptyPantry: "Nothing listed yet — add an ingredient below.", quickAdd: "Quick add", orAddOwn: "Or add your own", ingredientPlaceholder: "Ingredient, e.g. courgette", qtyPlaceholder: "Qty", howYouEat: "How you eat", findRecipes: "Find recipes", workingItOut: "Working it out…", loadMore: "Load more recipes", kcal: "kcal", protein: "protein", carbs: "carbs", fat: "fat", recipesEmptyTitle: "The stove is waiting.", recipesEmptySubtitle: "Stock your pantry, then come back and press \"Find recipes.\"", noFavoritesTitle: "No favorites yet.", noFavoritesSubtitle: "Tap the heart on any recipe to save it here.", addAtLeastOne: "Add at least one ingredient to your pantry first.", couldntGenerate: "Couldn't generate recipes just now. Try again in a moment.", noRecipesBack: "No recipes came back — try adjusting your pantry and try again.", min: "min", servings: "servings", alsoNeeds: "Also needs:", chooseLanguage: "Language", settingsIntro: "Set the table your way.", categoryLabels: { vegetables: "Vegetables", fruits: "Fruits", proteins: "Proteins", dairy: "Dairy & Eggs", grains: "Grains & Pantry", spices: "Spices" }, dietLabels: { carnivorous: "Carnivorous", vegetarian: "Vegetarian", vegan: "Vegan" } },
-  pt: { brand: "Livro da Despensa", navHome: "Início", navPantry: "Despensa", navRecipes: "Receitas", navFavorites: "Favoritos", navSettings: "Ajustes", homeGreeting: "O que vamos cozinhar hoje?", homeTagline: "O seu companheiro de cozinha — diga o que tem, e ele diz o que vai para a mesa.", statIngredients: "ingredientes na sua despensa", statFavorites: "favoritos guardados", homeGoPantry: "Encher a despensa", homeGoRecipes: "Encontrar algo para cozinhar", favorites: "Favoritos", yourPantry: "Sua despensa", emptyPantry: "Nada listado ainda — adicione um ingrediente abaixo.", quickAdd: "Adicionar rápido", orAddOwn: "Ou adicione o seu", ingredientPlaceholder: "Ingrediente, ex. courgette", qtyPlaceholder: "Qtd", howYouEat: "Como você come", findRecipes: "Encontrar receitas", workingItOut: "Preparando…", loadMore: "Carregar mais receitas", kcal: "kcal", protein: "proteína", carbs: "carboidratos", fat: "gordura", recipesEmptyTitle: "O fogão está à espera.", recipesEmptySubtitle: "Encha a despensa e depois volte e toque em \"Encontrar receitas.\"", noFavoritesTitle: "Ainda sem favoritos.", noFavoritesSubtitle: "Toque no coração de qualquer receita para guardá-la aqui.", addAtLeastOne: "Adicione pelo menos um ingrediente à sua despensa primeiro.", couldntGenerate: "Não foi possível gerar receitas agora. Tente novamente em instantes.", noRecipesBack: "Nenhuma receita foi encontrada — ajuste sua despensa e tente novamente.", min: "min", servings: "porções", alsoNeeds: "Também precisa de:", chooseLanguage: "Idioma", settingsIntro: "Ponha a mesa à sua maneira.", categoryLabels: { vegetables: "Vegetais", fruits: "Frutas", proteins: "Proteínas", dairy: "Laticínios e Ovos", grains: "Cereais e Despensa", spices: "Especiarias" }, dietLabels: { carnivorous: "Carnívoro", vegetarian: "Vegetariano", vegan: "Vegano" } },
-  es: { brand: "Libro de la Despensa", navHome: "Inicio", navPantry: "Despensa", navRecipes: "Recetas", navFavorites: "Favoritos", navSettings: "Ajustes", homeGreeting: "¿Qué cocinamos hoy?", homeTagline: "Tu compañero de cocina — dile lo que tienes, y te dice qué hay para cenar.", statIngredients: "ingredientes en tu despensa", statFavorites: "favoritos guardados", homeGoPantry: "Llenar la despensa", homeGoRecipes: "Buscar algo para cocinar", favorites: "Favoritos", yourPantry: "Tu despensa", emptyPantry: "Nada listado todavía — añade un ingrediente abajo.", quickAdd: "Añadir rápido", orAddOwn: "O añade el tuyo", ingredientPlaceholder: "Ingrediente, ej. calabacín", qtyPlaceholder: "Cant", howYouEat: "Cómo comes", findRecipes: "Buscar recetas", workingItOut: "Preparando…", loadMore: "Cargar más recetas", kcal: "kcal", protein: "proteína", carbs: "carbohidratos", fat: "grasa", recipesEmptyTitle: "Los fogones esperan.", recipesEmptySubtitle: "Llena tu despensa, vuelve y pulsa \"Buscar recetas.\"", noFavoritesTitle: "Aún no hay favoritos.", noFavoritesSubtitle: "Toca el corazón de cualquier receta para guardarla aquí.", addAtLeastOne: "Añade al menos un ingrediente a tu despensa primero.", couldntGenerate: "No se pudieron generar recetas ahora. Inténtalo de nuevo en un momento.", noRecipesBack: "No se encontraron recetas — ajusta tu despensa e inténtalo de nuevo.", min: "min", servings: "porciones", alsoNeeds: "También necesita:", chooseLanguage: "Idioma", settingsIntro: "Pon la mesa a tu manera.", categoryLabels: { vegetables: "Verduras", fruits: "Frutas", proteins: "Proteínas", dairy: "Lácteos y Huevos", grains: "Cereales y Despensa", spices: "Especias" }, dietLabels: { carnivorous: "Carnívoro", vegetarian: "Vegetariano", vegan: "Vegano" } },
-  fr: { brand: "Carnet du Garde-Manger", navHome: "Accueil", navPantry: "Garde-manger", navRecipes: "Recettes", navFavorites: "Favoris", navSettings: "Réglages", homeGreeting: "Qu'est-ce qu'on cuisine aujourd'hui ?", homeTagline: "Votre compagnon de cuisine — dites-lui ce que vous avez, il vous dit ce qu'il y a pour dîner.", statIngredients: "ingrédients dans votre garde-manger", statFavorites: "favoris enregistrés", homeGoPantry: "Remplir le garde-manger", homeGoRecipes: "Trouver quoi cuisiner", favorites: "Favoris", yourPantry: "Votre garde-manger", emptyPantry: "Rien n'est encore listé — ajoutez un ingrédient ci-dessous.", quickAdd: "Ajout rapide", orAddOwn: "Ou ajoutez le vôtre", ingredientPlaceholder: "Ingrédient, ex. courgette", qtyPlaceholder: "Qté", howYouEat: "Votre régime", findRecipes: "Trouver des recettes", workingItOut: "Ça mijote…", loadMore: "Charger plus de recettes", kcal: "kcal", protein: "protéines", carbs: "glucides", fat: "lipides", recipesEmptyTitle: "Les fourneaux attendent.", recipesEmptySubtitle: "Remplissez votre garde-manger, revenez et appuyez sur \"Trouver des recettes.\"", noFavoritesTitle: "Pas encore de favoris.", noFavoritesSubtitle: "Appuyez sur le cœur d'une recette pour l'enregistrer ici.", addAtLeastOne: "Ajoutez d'abord au moins un ingrédient à votre garde-manger.", couldntGenerate: "Impossible de générer des recettes pour le moment. Réessayez dans un instant.", noRecipesBack: "Aucune recette trouvée — ajustez votre garde-manger et réessayez.", min: "min", servings: "portions", alsoNeeds: "Il faut aussi :", chooseLanguage: "Langue", settingsIntro: "Mettez la table à votre façon.", categoryLabels: { vegetables: "Légumes", fruits: "Fruits", proteins: "Protéines", dairy: "Laitages et Œufs", grains: "Céréales et Épicerie", spices: "Épices" }, dietLabels: { carnivorous: "Carnivore", vegetarian: "Végétarien", vegan: "Végane" } },
-  it: { brand: "Quaderno della Dispensa", navHome: "Home", navPantry: "Dispensa", navRecipes: "Ricette", navFavorites: "Preferiti", navSettings: "Impostazioni", homeGreeting: "Cosa cuciniamo oggi?", homeTagline: "Il tuo compagno di cucina — digli cosa hai, e ti dice cosa c'è per cena.", statIngredients: "ingredienti nella tua dispensa", statFavorites: "preferiti salvati", homeGoPantry: "Riempire la dispensa", homeGoRecipes: "Trovare qualcosa da cucinare", favorites: "Preferiti", yourPantry: "La tua dispensa", emptyPantry: "Ancora nulla in elenco — aggiungi un ingrediente qui sotto.", quickAdd: "Aggiunta rapida", orAddOwn: "O aggiungi il tuo", ingredientPlaceholder: "Ingrediente, es. zucchina", qtyPlaceholder: "Qtà", howYouEat: "Come mangi", findRecipes: "Trova ricette", workingItOut: "Sto preparando…", loadMore: "Carica altre ricette", kcal: "kcal", protein: "proteine", carbs: "carboidrati", fat: "grassi", recipesEmptyTitle: "I fornelli aspettano.", recipesEmptySubtitle: "Riempi la dispensa, torna e premi \"Trova ricette.\"", noFavoritesTitle: "Ancora nessun preferito.", noFavoritesSubtitle: "Tocca il cuore di una ricetta per salvarla qui.", addAtLeastOne: "Aggiungi prima almeno un ingrediente alla tua dispensa.", couldntGenerate: "Impossibile generare ricette al momento. Riprova tra poco.", noRecipesBack: "Nessuna ricetta trovata — modifica la tua dispensa e riprova.", min: "min", servings: "porzioni", alsoNeeds: "Serve anche:", chooseLanguage: "Lingua", settingsIntro: "Apparecchia a modo tuo.", categoryLabels: { vegetables: "Verdure", fruits: "Frutta", proteins: "Proteine", dairy: "Latticini e Uova", grains: "Cereali e Dispensa", spices: "Spezie" }, dietLabels: { carnivorous: "Carnivoro", vegetarian: "Vegetariano", vegan: "Vegano" } },
+  en: { brand: "Pantry Ledger", navHome: "Home", navPantry: "Pantry", navRecipes: "Recipes", navFavorites: "Favorites", navSettings: "Settings", homeGreeting: "What's cooking today?", homeTagline: "Your kitchen companion — tell it what you have, it tells you what's for dinner.", statIngredients: "ingredients in your pantry", statFavorites: "saved favorites", homeGoPantry: "Stock the pantry", homeGoRecipes: "Find something to cook", favorites: "Favorites", yourPantry: "Your pantry", emptyPantry: "Nothing listed yet — add an ingredient below.", quickAdd: "Quick add", orAddOwn: "Or add your own", ingredientPlaceholder: "Ingredient, e.g. courgette", qtyPlaceholder: "Qty", howYouEat: "How you eat", findRecipes: "Find recipes", workingItOut: "Working it out…", loadMore: "Load more recipes", markCooked: "I cooked this", cookedDone: "Cooked — pantry updated", kcal: "kcal", protein: "protein", carbs: "carbs", fat: "fat", recipesEmptyTitle: "The stove is waiting.", recipesEmptySubtitle: "Stock your pantry, then come back and press \"Find recipes.\"", noFavoritesTitle: "No favorites yet.", noFavoritesSubtitle: "Tap the heart on any recipe to save it here.", addAtLeastOne: "Add at least one ingredient to your pantry first.", couldntGenerate: "Couldn't generate recipes just now. Try again in a moment.", noRecipesBack: "No recipes came back — try adjusting your pantry and try again.", min: "min", servings: "servings", alsoNeeds: "Also needs:", chooseLanguage: "Language", settingsIntro: "Set the table your way.", categoryLabels: { vegetables: "Vegetables", fruits: "Fruits", proteins: "Proteins", dairy: "Dairy & Eggs", grains: "Grains & Pantry", spices: "Spices" }, dietLabels: { carnivorous: "Carnivorous", vegetarian: "Vegetarian", vegan: "Vegan" } },
+  pt: { brand: "Livro da Despensa", navHome: "Início", navPantry: "Despensa", navRecipes: "Receitas", navFavorites: "Favoritos", navSettings: "Ajustes", homeGreeting: "O que vamos cozinhar hoje?", homeTagline: "O seu companheiro de cozinha — diga o que tem, e ele diz o que vai para a mesa.", statIngredients: "ingredientes na sua despensa", statFavorites: "favoritos guardados", homeGoPantry: "Encher a despensa", homeGoRecipes: "Encontrar algo para cozinhar", favorites: "Favoritos", yourPantry: "Sua despensa", emptyPantry: "Nada listado ainda — adicione um ingrediente abaixo.", quickAdd: "Adicionar rápido", orAddOwn: "Ou adicione o seu", ingredientPlaceholder: "Ingrediente, ex. courgette", qtyPlaceholder: "Qtd", howYouEat: "Como você come", findRecipes: "Encontrar receitas", workingItOut: "Preparando…", loadMore: "Carregar mais receitas", markCooked: "Cozinhei isto", cookedDone: "Cozinhado — despensa atualizada", kcal: "kcal", protein: "proteína", carbs: "carboidratos", fat: "gordura", recipesEmptyTitle: "O fogão está à espera.", recipesEmptySubtitle: "Encha a despensa e depois volte e toque em \"Encontrar receitas.\"", noFavoritesTitle: "Ainda sem favoritos.", noFavoritesSubtitle: "Toque no coração de qualquer receita para guardá-la aqui.", addAtLeastOne: "Adicione pelo menos um ingrediente à sua despensa primeiro.", couldntGenerate: "Não foi possível gerar receitas agora. Tente novamente em instantes.", noRecipesBack: "Nenhuma receita foi encontrada — ajuste sua despensa e tente novamente.", min: "min", servings: "porções", alsoNeeds: "Também precisa de:", chooseLanguage: "Idioma", settingsIntro: "Ponha a mesa à sua maneira.", categoryLabels: { vegetables: "Vegetais", fruits: "Frutas", proteins: "Proteínas", dairy: "Laticínios e Ovos", grains: "Cereais e Despensa", spices: "Especiarias" }, dietLabels: { carnivorous: "Carnívoro", vegetarian: "Vegetariano", vegan: "Vegano" } },
+  es: { brand: "Libro de la Despensa", navHome: "Inicio", navPantry: "Despensa", navRecipes: "Recetas", navFavorites: "Favoritos", navSettings: "Ajustes", homeGreeting: "¿Qué cocinamos hoy?", homeTagline: "Tu compañero de cocina — dile lo que tienes, y te dice qué hay para cenar.", statIngredients: "ingredientes en tu despensa", statFavorites: "favoritos guardados", homeGoPantry: "Llenar la despensa", homeGoRecipes: "Buscar algo para cocinar", favorites: "Favoritos", yourPantry: "Tu despensa", emptyPantry: "Nada listado todavía — añade un ingrediente abajo.", quickAdd: "Añadir rápido", orAddOwn: "O añade el tuyo", ingredientPlaceholder: "Ingrediente, ej. calabacín", qtyPlaceholder: "Cant", howYouEat: "Cómo comes", findRecipes: "Buscar recetas", workingItOut: "Preparando…", loadMore: "Cargar más recetas", markCooked: "Lo cociné", cookedDone: "Cocinado — despensa actualizada", kcal: "kcal", protein: "proteína", carbs: "carbohidratos", fat: "grasa", recipesEmptyTitle: "Los fogones esperan.", recipesEmptySubtitle: "Llena tu despensa, vuelve y pulsa \"Buscar recetas.\"", noFavoritesTitle: "Aún no hay favoritos.", noFavoritesSubtitle: "Toca el corazón de cualquier receta para guardarla aquí.", addAtLeastOne: "Añade al menos un ingrediente a tu despensa primero.", couldntGenerate: "No se pudieron generar recetas ahora. Inténtalo de nuevo en un momento.", noRecipesBack: "No se encontraron recetas — ajusta tu despensa e inténtalo de nuevo.", min: "min", servings: "porciones", alsoNeeds: "También necesita:", chooseLanguage: "Idioma", settingsIntro: "Pon la mesa a tu manera.", categoryLabels: { vegetables: "Verduras", fruits: "Frutas", proteins: "Proteínas", dairy: "Lácteos y Huevos", grains: "Cereales y Despensa", spices: "Especias" }, dietLabels: { carnivorous: "Carnívoro", vegetarian: "Vegetariano", vegan: "Vegano" } },
+  fr: { brand: "Carnet du Garde-Manger", navHome: "Accueil", navPantry: "Garde-manger", navRecipes: "Recettes", navFavorites: "Favoris", navSettings: "Réglages", homeGreeting: "Qu'est-ce qu'on cuisine aujourd'hui ?", homeTagline: "Votre compagnon de cuisine — dites-lui ce que vous avez, il vous dit ce qu'il y a pour dîner.", statIngredients: "ingrédients dans votre garde-manger", statFavorites: "favoris enregistrés", homeGoPantry: "Remplir le garde-manger", homeGoRecipes: "Trouver quoi cuisiner", favorites: "Favoris", yourPantry: "Votre garde-manger", emptyPantry: "Rien n'est encore listé — ajoutez un ingrédient ci-dessous.", quickAdd: "Ajout rapide", orAddOwn: "Ou ajoutez le vôtre", ingredientPlaceholder: "Ingrédient, ex. courgette", qtyPlaceholder: "Qté", howYouEat: "Votre régime", findRecipes: "Trouver des recettes", workingItOut: "Ça mijote…", loadMore: "Charger plus de recettes", markCooked: "Je l\u2019ai cuisiné", cookedDone: "Cuisiné — garde-manger mis à jour", kcal: "kcal", protein: "protéines", carbs: "glucides", fat: "lipides", recipesEmptyTitle: "Les fourneaux attendent.", recipesEmptySubtitle: "Remplissez votre garde-manger, revenez et appuyez sur \"Trouver des recettes.\"", noFavoritesTitle: "Pas encore de favoris.", noFavoritesSubtitle: "Appuyez sur le cœur d'une recette pour l'enregistrer ici.", addAtLeastOne: "Ajoutez d'abord au moins un ingrédient à votre garde-manger.", couldntGenerate: "Impossible de générer des recettes pour le moment. Réessayez dans un instant.", noRecipesBack: "Aucune recette trouvée — ajustez votre garde-manger et réessayez.", min: "min", servings: "portions", alsoNeeds: "Il faut aussi :", chooseLanguage: "Langue", settingsIntro: "Mettez la table à votre façon.", categoryLabels: { vegetables: "Légumes", fruits: "Fruits", proteins: "Protéines", dairy: "Laitages et Œufs", grains: "Céréales et Épicerie", spices: "Épices" }, dietLabels: { carnivorous: "Carnivore", vegetarian: "Végétarien", vegan: "Végane" } },
+  it: { brand: "Quaderno della Dispensa", navHome: "Home", navPantry: "Dispensa", navRecipes: "Ricette", navFavorites: "Preferiti", navSettings: "Impostazioni", homeGreeting: "Cosa cuciniamo oggi?", homeTagline: "Il tuo compagno di cucina — digli cosa hai, e ti dice cosa c'è per cena.", statIngredients: "ingredienti nella tua dispensa", statFavorites: "preferiti salvati", homeGoPantry: "Riempire la dispensa", homeGoRecipes: "Trovare qualcosa da cucinare", favorites: "Preferiti", yourPantry: "La tua dispensa", emptyPantry: "Ancora nulla in elenco — aggiungi un ingrediente qui sotto.", quickAdd: "Aggiunta rapida", orAddOwn: "O aggiungi il tuo", ingredientPlaceholder: "Ingrediente, es. zucchina", qtyPlaceholder: "Qtà", howYouEat: "Come mangi", findRecipes: "Trova ricette", workingItOut: "Sto preparando…", loadMore: "Carica altre ricette", markCooked: "L\u2019ho cucinato", cookedDone: "Cucinato — dispensa aggiornata", kcal: "kcal", protein: "proteine", carbs: "carboidrati", fat: "grassi", recipesEmptyTitle: "I fornelli aspettano.", recipesEmptySubtitle: "Riempi la dispensa, torna e premi \"Trova ricette.\"", noFavoritesTitle: "Ancora nessun preferito.", noFavoritesSubtitle: "Tocca il cuore di una ricetta per salvarla qui.", addAtLeastOne: "Aggiungi prima almeno un ingrediente alla tua dispensa.", couldntGenerate: "Impossibile generare ricette al momento. Riprova tra poco.", noRecipesBack: "Nessuna ricetta trovata — modifica la tua dispensa e riprova.", min: "min", servings: "porzioni", alsoNeeds: "Serve anche:", chooseLanguage: "Lingua", settingsIntro: "Apparecchia a modo tuo.", categoryLabels: { vegetables: "Verdure", fruits: "Frutta", proteins: "Proteine", dairy: "Latticini e Uova", grains: "Cereali e Dispensa", spices: "Spezie" }, dietLabels: { carnivorous: "Carnivoro", vegetarian: "Vegetariano", vegan: "Vegano" } },
 };
+
+
+// ---- Persistent storage (works on the deployed web app and the native app;
+// in the chat preview sandbox it silently falls back to memory-only) ----
+const STORAGE_KEY = "pantry-ledger-v1";
+function loadState() {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+function saveState(state) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    // storage unavailable — ignore
+  }
+}
+const SAVED = loadState();
+
+// ---- Quantity deduction when a recipe is cooked ----
+const UNIT_BASE = { g: { f: 1, b: "g" }, kg: { f: 1000, b: "g" }, ml: { f: 1, b: "ml" }, l: { f: 1000, b: "ml" } };
+function deductFromPantry(pantry, used) {
+  const next = [...pantry];
+  for (const u of used || []) {
+    if (!u || typeof u === "string") continue; // old-format favorites: no quantities, skip
+    const idx = next.findIndex((p) => p.name.toLowerCase() === String(u.name || "").toLowerCase());
+    if (idx === -1) continue;
+    const item = next[idx];
+    const pQty = parseFloat(item.qty);
+    const uQty = parseFloat(u.qty);
+    if (isNaN(pQty) || isNaN(uQty)) continue;
+    const pu = UNIT_BASE[item.unit];
+    const uu = UNIT_BASE[u.unit];
+    let remainingBase;
+    if (pu && uu && pu.b === uu.b) {
+      remainingBase = pQty * pu.f - uQty * uu.f; // metric conversion (kg<->g, l<->ml)
+    } else if (item.unit === u.unit) {
+      remainingBase = pQty - uQty; // same unit (pieces, tsp, ...)
+    } else {
+      continue; // incompatible units — leave untouched rather than guess
+    }
+    if (remainingBase <= 0) {
+      next.splice(idx, 1); // used up — remove from pantry
+    } else {
+      const backQty = pu && uu && pu.b === uu.b ? remainingBase / pu.f : remainingBase;
+      next[idx] = { ...item, qty: String(Math.round(backQty * 100) / 100) };
+    }
+  }
+  return next;
+}
 
 function translateItem(name, lang) {
   return ITEM_TRANSLATIONS[name]?.[lang] || name;
@@ -157,7 +210,7 @@ function Gingham({ height = 12 }) {
   );
 }
 
-function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, t }) {
+function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, cooked, onCook, t }) {
   return (
     <div className="card-in rounded-2xl overflow-hidden" style={{ background: "#FFFDF6", border: "1px solid #EAE0C9", boxShadow: "0 8px 20px -12px rgba(59,48,36,0.35)", animationDelay: `${delay}ms` }}>
       <div style={{ height: 5, background: dietColor }} />
@@ -195,7 +248,9 @@ function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, 
         {r.used_ingredients?.length > 0 && (
           <div className="mb-3 flex flex-wrap gap-1.5">
             {r.used_ingredients.map((u, ui) => (
-              <span key={ui} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "rgba(95,111,69,0.14)", color: "#5F6F45" }}>{u}</span>
+              <span key={ui} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "rgba(95,111,69,0.14)", color: "#5F6F45" }}>
+                {typeof u === "string" ? u : `${u.qty} ${u.unit} ${u.name}`}
+              </span>
             ))}
           </div>
         )}
@@ -209,6 +264,22 @@ function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, 
             ))}
           </ol>
         )}
+        {onCook && (
+          <button
+            onClick={() => onCook(r)}
+            disabled={cooked}
+            className="w-full mt-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:active:scale-100"
+            style={{
+              background: cooked ? "rgba(95,111,69,0.15)" : "#5F6F45",
+              color: cooked ? "#5F6F45" : "#FBF6E9",
+              border: cooked ? "1px solid rgba(95,111,69,0.4)" : "1px solid transparent",
+              cursor: cooked ? "default" : "pointer",
+            }}
+          >
+            <CheckCircle2 size={16} strokeWidth={2.2} />
+            {cooked ? t.cookedDone : t.markCooked}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -216,15 +287,17 @@ function RecipeCard({ recipe: r, dietColor, delay, favorited, onToggleFavorite, 
 
 export default function PantryDashboard() {
   const [page, setPage] = useState("home");
-  const [lang, setLang] = useState("en");
-  const [pantry, setPantry] = useState([
-    { name: "Eggs", qty: "6", unit: "piece" },
-    { name: "Spinach", qty: "150", unit: "g" },
-  ]);
+  const [lang, setLang] = useState(SAVED?.lang ?? "en");
+  const [pantry, setPantry] = useState(
+    SAVED?.pantry ?? [
+      { name: "Eggs", qty: "6", unit: "piece" },
+      { name: "Spinach", qty: "150", unit: "g" },
+    ]
+  );
   const [name, setName] = useState("");
   const [qty, setQty] = useState("");
   const [unit, setUnit] = useState("piece");
-  const [diet, setDiet] = useState("vegetarian");
+  const [diet, setDiet] = useState(SAVED?.diet ?? "vegetarian");
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -232,10 +305,23 @@ export default function PantryDashboard() {
   const [hasSearched, setHasSearched] = useState(false);
   const [quickCategory, setQuickCategory] = useState("vegetables");
   const [justAdded, setJustAdded] = useState("");
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(SAVED?.favorites ?? []);
+  const [cookedTitles, setCookedTitles] = useState(SAVED?.cookedTitles ?? []);
   const nameInputRef = useRef(null);
 
   const t = TRANSLATIONS[lang];
+
+  // Persist everything durable whenever it changes.
+  useEffect(() => {
+    saveState({ pantry, favorites, lang, diet, cookedTitles });
+  }, [pantry, favorites, lang, diet, cookedTitles]);
+
+  const isCooked = (recipe) => cookedTitles.includes(recipe.title);
+  const cookRecipe = (recipe) => {
+    if (isCooked(recipe)) return;
+    setPantry((prev) => deductFromPantry(prev, recipe.used_ingredients));
+    setCookedTitles((prev) => [...prev, recipe.title]);
+  };
 
   const isFavorite = (recipe) => favorites.some((f) => f.title === recipe.title);
   const toggleFavorite = (recipe) => setFavorites((prev) => (isFavorite(recipe) ? prev.filter((f) => f.title !== recipe.title) : [...prev, recipe]));
@@ -471,7 +557,7 @@ export default function PantryDashboard() {
             {!loading && recipes.length > 0 && (
               <>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {recipes.map((r, i) => (<RecipeCard key={r.title + i} recipe={r} dietColor={activeDiet?.color} delay={(i % 3) * 80} favorited={isFavorite(r)} onToggleFavorite={toggleFavorite} t={t} />))}
+                  {recipes.map((r, i) => (<RecipeCard key={r.title + i} recipe={r} dietColor={activeDiet?.color} delay={(i % 3) * 80} favorited={isFavorite(r)} onToggleFavorite={toggleFavorite} cooked={isCooked(r)} onCook={cookRecipe} t={t} />))}
                 </div>
                 <div className="flex justify-center mt-5">
                   <button onClick={() => generateRecipes(true)} disabled={loadingMore} className="px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-transform active:scale-95 disabled:opacity-70" style={{ background: "#FFFDF6", color: "#B04A2F", border: "1px solid #EAE0C9" }}>
@@ -494,7 +580,7 @@ export default function PantryDashboard() {
             <h1 className="serif text-3xl font-semibold mt-4 mb-5">{t.favorites}</h1>
             {favorites.length > 0 ? (
               <div className="grid sm:grid-cols-2 gap-4">
-                {favorites.map((r, i) => (<RecipeCard key={r.title + i} recipe={r} dietColor={activeDiet?.color} delay={i * 80} favorited={true} onToggleFavorite={toggleFavorite} t={t} />))}
+                {favorites.map((r, i) => (<RecipeCard key={r.title + i} recipe={r} dietColor={activeDiet?.color} delay={i * 80} favorited={true} onToggleFavorite={toggleFavorite} cooked={isCooked(r)} onCook={cookRecipe} t={t} />))}
               </div>
             ) : (
               <div className="rounded-2xl p-10 text-center" style={{ border: "2px dashed #E0D4BB" }}>

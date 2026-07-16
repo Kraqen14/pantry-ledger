@@ -82,7 +82,7 @@ Respond with ONLY a raw JSON array (no markdown fences, no preamble, no commenta
   "description": string (one short sentence, appetizing, plain language),
   "time_minutes": number,
   "servings": number,
-  "used_ingredients": string[] (pantry ingredients this recipe uses),
+  "used_ingredients": array of objects, each { "name": string (EXACT pantry ingredient name as given in the list above), "qty": number (amount of it this recipe uses), "unit": string (the same unit that ingredient was given in) },
   "extra_ingredients": string[] (additional ingredients needed, short list),
   "steps": string[] (4-6 concise steps),
   "macros": { "calories": number, "protein_g": number, "carbs_g": number, "fat_g": number } (best-effort estimate per serving)
