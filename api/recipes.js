@@ -35,6 +35,16 @@ function parseRecipesSafely(text) {
 }
 
 export default async function handler(req, res) {
+  // CORS: the native mobile app (Capacitor) calls this API from a different
+  // origin than the website, so we must explicitly allow cross-origin requests.
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return;
+  }
+
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
@@ -63,6 +73,8 @@ Their dietary preference is: ${dietLabelEn} (carnivorous means any meat/fish is 
 Suggest 3 recipes that make good use of as many of the pantry ingredients as possible, respecting the dietary preference strictly. It's fine to include a few common pantry staples (salt, pepper, oil, garlic, water) as extra ingredients, but keep other additional ingredients minimal.
 ${avoidBlock}
 Write the entire response — every title, description, ingredient name, and step — in ${languageName}.
+
+Each recipe must be a real, coherent dish. The title must accurately name what's actually in it — never reference a different protein or ingredient than the ones used (e.g. do not call a pork dish "chicken" anything). Before finalizing, check that the title, description, and used_ingredients are all consistent with each other.
 
 Respond with ONLY a raw JSON array (no markdown fences, no preamble, no commentary) of exactly 3 objects, each with this shape:
 {
